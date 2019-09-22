@@ -2,6 +2,8 @@
 #define COMMAND_H
 #include "buffer.h"
 #include <string.h>
+#include "row.h"
+#include "b-tree.h"
 
 typedef enum {
     COMMAND_SUCCESS,
