@@ -18,11 +18,14 @@ void print_leaf_node(void* node) {
     }
 }
 
-CommandResult exec_command(InputBuffer* input_buffer) {
+CommandResult exec_command(InputBuffer* input_buffer, Table* table) {
     if (strcmp(input_buffer->buffer, ".exit") == 0) {
-        return COMMAND_SUCCESS;
-    } else if (strcmp(input_buffer->buffer, ".constants")) {
+        return EXIT_COMMAND;
+    } else if (strcmp(input_buffer->buffer, ".constants") == 0) {
         print_constants();
+        return COMMAND_SUCCESS;
+    } else if (strcmp(input_buffer->buffer, ".btree") == 0) {
+        print_leaf_node(get_page(table->pager, 0));
         return COMMAND_SUCCESS;
     } else {
         return UNRECOGNIZED_COMMAND;

@@ -7,8 +7,9 @@
 
 typedef enum {
     COMMAND_SUCCESS,
+    EXIT_COMMAND,
     UNRECOGNIZED_COMMAND
 } CommandResult;
 
-CommandResult exec_command(InputBuffer* input_buffer);
+CommandResult exec_command(InputBuffer* input_buffer, Table* table);
 #endif

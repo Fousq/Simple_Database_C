@@ -5,7 +5,7 @@ void init_leaf_node(void* node) {
 }
 
 uint32_t* leaf_node_num_cells(void* node) {
-    return LEAF_NODE_NUM_CELLS_OFFSET;
+    return node + LEAF_NODE_NUM_CELLS_OFFSET;
 }
 
 void* leaf_node_cell(void* node, uint32_t cell_num) {

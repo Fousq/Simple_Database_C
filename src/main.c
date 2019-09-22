@@ -22,17 +22,20 @@ int main(int argc, char* argv[]) {
         read_input(input_buffer);
 
         if (input_buffer->buffer[0] == '.') {
-            switch (exec_command(input_buffer))
+            switch (exec_command(input_buffer, table))
             {
             case COMMAND_SUCCESS:
+                continue;
+            case EXIT_COMMAND:
                 db_close(table);
                 close_input_buffer(input_buffer);
                 exit(EXIT_SUCCESS);
-                break;
+                continue;
             case UNRECOGNIZED_COMMAND:
                 printf("Unrecognized command %s\n", input_buffer->buffer);
+                continue;
             default:
-                break;
+                continue;
             }
         }
         
