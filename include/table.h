@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <b-tree.h>
 
 typedef struct
 {
@@ -16,7 +17,8 @@ typedef struct
 typedef struct
 {
     Table* table;
-    uint32_t row_num;
+    uint32_t page_num;
+    uint32_t cell_num;
     bool end_of_table;
 } Cursor;
 

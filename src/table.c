@@ -2,11 +2,16 @@
 
 Table* db_open(const char* filename) {
     Pager* pager = pager_fopen(filename);
-    uint32_t num_rows = pager->file_length / ROW_SIZE;
 
     Table* table = (Table*)malloc(sizeof(Table));
-    table->num_rows = num_rows;
     table->pager = pager;
+    table->root_page_num = 0;
+
+    if (pager->num_pages == 0) {
+        //new database file
+        void* root_node = get_page(pager, 0);
+        init_leaf_node(root_node);
+    }
 
     return table;
 }
@@ -14,25 +19,30 @@ Table* db_open(const char* filename) {
 Cursor* table_start(Table* table) {
     Cursor* cursor = (Cursor*) malloc(sizeof(Cursor));
     cursor->table = table;
-    cursor->row_num = 0;
-    cursor->end_of_table = (table->num_rows == 0);
+    cursor->page_num = table->root_page_num;
+    cursor->cell_num = 0;
+
+    void* root_page = get_page(table->pager, table->root_page_num);
+    uint32_t num_cells = *leaf_node_num_cells(root_page);
+    cursor->end_of_table = (num_cells == 0);
 
     return cursor;
 }
 
 void* cursor_value(Cursor* cursor) {
-    uint32_t page_num = cursor->row_num / ROWS_PRE_PAGE;
+    uint32_t page_num = cursor->page_num;
 
     void* page = get_page(cursor->table->pager, page_num);
     
-    uint32_t row_offset = cursor->row_num % ROWS_PRE_PAGE;
-    uint32_t byte_offset = row_offset * ROW_SIZE;
-    return page + byte_offset;
+    return leaf_node_value(page, cursor->cell_num);
 }
 
 void next(Cursor* cursor) {
-    cursor->row_num++;
-    if (cursor->row_num >= cursor->table->num_rows) {
+    uint32_t page_num = cursor->page_num;
+    void* node = get_page(cursor->table->pager, page_num);
+    
+    cursor->cell_num++;
+    if (cursor->cell_num >= (*leaf_node_num_cells(node))) {
         cursor->end_of_table = true;
     }
 }
@@ -40,7 +50,11 @@ void next(Cursor* cursor) {
 Cursor* table_end(Table* table) {
     Cursor* cursor = (Cursor*)malloc(sizeof(Cursor));
     cursor->table = table;
-    cursor->row_num = table->num_rows;
+    cursor->page_num = table->root_page_num;
+
+    void* root_node = get_page(table->pager, table->root_page_num);
+    uint32_t num_cells = *leaf_node_num_cells(root_node);
+    cursor->cell_num = num_cells;
     cursor->end_of_table = true;
 
     return cursor;
