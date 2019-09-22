@@ -28,5 +28,6 @@ void* cursor_value(Cursor* cursor);
 void next(Cursor* cursor);
 Cursor* table_end(Table* table);
 void db_close(Table* table);
+void leaf_node_insert(Cursor* cursor, uint32_t key, Row* value);
 
 #endif

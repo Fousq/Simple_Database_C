@@ -29,6 +29,7 @@ OBJS = ${BIN_DIR}/buffer.o \
 		${BIN_DIR}/row.o \
 		${BIN_DIR}/statement.o \
 		${BIN_DIR}/table.o \
+		${BIN_DIR}/b-tree.o \
 		${BIN_DIR}/main.o
 
 LINK_EXE = ${CC} -o db ${OBJS}

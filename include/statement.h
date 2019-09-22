@@ -3,6 +3,7 @@
 #include "buffer.h"
 #include "row.h"
 #include "table.h"
+#include "b-tree.h"
 
 #include<string.h>
 #include <stdio.h>

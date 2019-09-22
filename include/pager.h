@@ -9,8 +9,6 @@
 
 #define PAGE_SIZE 4096
 #define TABLE_MAX_PAGES 100
-#define ROWS_PRE_PAGE (uint32_t)(PAGE_SIZE / ROW_SIZE)
-#define TABLE_MAX_ROWS TABLE_MAX_PAGES * ROWS_PRE_PAGE
 
 
 typedef struct
